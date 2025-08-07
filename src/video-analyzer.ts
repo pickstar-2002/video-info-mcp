@@ -54,9 +54,9 @@ export class VideoAnalyzer {
       pixelFormat: stream.pix_fmt,
       frameRate: stream.r_frame_rate,
       avgFrameRate: stream.avg_frame_rate,
-      bitRate: stream.bit_rate,
-      maxBitRate: stream.max_bit_rate,
-      totalFrames: stream.nb_frames,
+      bitRate: stream.bit_rate ? String(stream.bit_rate) : undefined,
+      maxBitRate: stream.max_bit_rate ? String(stream.max_bit_rate) : undefined,
+      totalFrames: stream.nb_frames ? String(stream.nb_frames) : undefined,
       colorSpace: stream.color_space,
       colorRange: stream.color_range
     }));
@@ -67,12 +67,12 @@ export class VideoAnalyzer {
       codec: stream.codec_name,
       codecLongName: stream.codec_long_name,
       profile: stream.profile,
-      sampleRate: stream.sample_rate,
+      sampleRate: String(stream.sample_rate),
       channels: stream.channels,
       channelLayout: stream.channel_layout,
       sampleFormat: stream.sample_fmt,
-      bitRate: stream.bit_rate,
-      maxBitRate: stream.max_bit_rate
+      bitRate: stream.bit_rate ? String(stream.bit_rate) : undefined,
+      maxBitRate: stream.max_bit_rate ? String(stream.max_bit_rate) : undefined
     }));
 
     // 计算码率分析
@@ -84,8 +84,8 @@ export class VideoAnalyzer {
     return {
       filename: path.basename(filePath),
       fileSize: this.formatFileSize(fileStats.size),
-      duration: videoInfo.format.duration || '未知',
-      durationSeconds: parseFloat(videoInfo.format.duration || '0'),
+      duration: String(videoInfo.format.duration || '未知'),
+      durationSeconds: parseFloat(String(videoInfo.format.duration || '0')),
       format: videoInfo.format.format_name,
       formatLongName: videoInfo.format.format_long_name,
       videoStreams: processedVideoStreams,
@@ -99,8 +99,8 @@ export class VideoAnalyzer {
    * 计算码率分析
    */
   private calculateBitrateAnalysis(videoInfo: VideoInfo, fileSize: number) {
-    const duration = parseFloat(videoInfo.format.duration || '0');
-    const overallBitRate = videoInfo.format.bit_rate;
+    const duration = parseFloat(String(videoInfo.format.duration || '0'));
+    const overallBitRate = videoInfo.format.bit_rate ? String(videoInfo.format.bit_rate) : undefined;
     
     // 计算视频和音频码率
     const videoStreams = videoInfo.streams.filter(s => s.codec_type === 'video') as VideoStream[];
@@ -111,21 +111,21 @@ export class VideoAnalyzer {
     
     // 计算最大码率
     const maxBitRates = videoInfo.streams
-      .map(s => s.max_bit_rate ? parseInt(s.max_bit_rate) : 0)
+      .map(s => s.max_bit_rate ? parseInt(String(s.max_bit_rate)) : 0)
       .filter(rate => rate > 0);
     const maxBitRate = maxBitRates.length > 0 ? Math.max(...maxBitRates).toString() : undefined;
 
     // 估算文件大小（基于码率）
     let estimatedSize = '未知';
     if (overallBitRate && duration > 0) {
-      const estimatedBytes = (parseInt(overallBitRate) * duration) / 8;
+      const estimatedBytes = overallBitRate ? (parseInt(overallBitRate) * duration) / 8 : 0;
       estimatedSize = this.formatFileSize(estimatedBytes);
     }
 
     return {
       overallBitRate,
-      videoBitRate,
-      audioBitRate,
+      videoBitRate: videoStreams[0]?.bit_rate ? String(videoStreams[0].bit_rate) : undefined,
+      audioBitRate: audioStreams[0]?.bit_rate ? String(audioStreams[0].bit_rate) : undefined,
       maxBitRate,
       estimatedSize
     };

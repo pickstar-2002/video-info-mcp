@@ -1,7 +1,7 @@
 {
   "name": "@pickstar-2002/video-info-mcp",
-  "version": "1.0.0",
-  "description": "基于 MCP 协议的视频信息提取工具",
+  "version": "1.1.0",
+  "description": "🎬 基于 MCP 协议的专业视频信息分析工具，支持多格式视频文件的详细信息提取和技术参数分析",
   "main": "dist/index.js",
   "bin": {
     "video-info-mcp": "dist/index.js"
@@ -10,17 +10,31 @@
     "build": "tsc",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "mcp",
     "video",
     "ffmpeg",
     "media",
-    "analysis"
+    "analysis",
+    "video-info",
+    "model-context-protocol",
+    "ai-tools",
+    "video-analysis",
+    "metadata"
   ],
   "author": "pickstar-2002",
   "license": "MIT",
+  "homepage": "https://github.com/pickstar-2002/video-info-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pickstar-2002/video-info-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pickstar-2002/video-info-mcp/issues"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.5.0",
     "fluent-ffmpeg": "^2.1.3",

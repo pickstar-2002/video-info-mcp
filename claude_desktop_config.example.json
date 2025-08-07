@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "video-info": {
+      "command": "npx",
+      "args": ["video-info-mcp"],
+      "env": {}
+    }
+  }
+}
